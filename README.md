@@ -13,4 +13,6 @@ For the first task, the first step is to downsample the voxel size and implement
 For the second task, we use Open3D functions to cluster the points based on the radius of the neighbourhood and the minimum number of points of the cluster (tuned by trial and error).
 Lastly, Open3D functions are used to trace the bounding boxes around the relevant objects. Giving a threshold for dimensions of the box allows for less relevant obstacles (i.e. buildings) to be discarded.
 
-![Results after completion](Lab1/Slide1.png)
+![Results after completion](Lab1/Slide1.PNG)
+
+## Lab 2 - Coming soon.
