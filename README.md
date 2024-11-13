@@ -15,4 +15,4 @@ Lastly, Open3D functions are used to trace the bounding boxes around the relevan
 
 ![Results after completion](Lab0/Slide1.PNG)
 
-## Lab 2 - Coming soon.
+## Lab 2 - Colaborative Perception
