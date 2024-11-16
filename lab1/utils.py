@@ -22,7 +22,8 @@ CLASS_NAME_TO_COLOR = dict(zip(CLASS_NAMES, CLASS_COLORS))
 CLASS_NAME_TO_INDEX = dict(zip(CLASS_NAMES, range(len(CLASS_NAMES))))
 
 # Path extraction
-root_path = "/home/ecn/Desktop/AUVE/ecn_auve/Lab0/scenario1"
+root_path = "/home/ecn/Desktop/ecn_auve/Lab0/scenario1"
+
 
 scenario = "Town01_type001_subtype0001_scenario00003"  
 
@@ -141,13 +142,13 @@ def get_boxes_in_actor_frame(n_frame, actor): # TODO
     sensor_to_actor = get_sensor_T_actor(actor, n_frame)
     #transform the box centers
     transformed_centers = apply_tf(sensor_to_actor, boxes)
+
     #apply the transformed centers to the boxes
     boxes[:,:3] = transformed_centers[:,:3]
     
     return boxes
 
 def get_available_boxes_in_ego_frame(n_frame, actors):
-    
     '''
     :param n_frame: 
     :param actors: a list of actors, the first one is ego vehicle
@@ -159,32 +160,34 @@ def get_available_boxes_in_ego_frame(n_frame, actors):
     boxes = get_boxes_in_actor_frame(n_frame, actors[0]) #in ego frame
     boxes = np.array(boxes).reshape(-1,8)
     ego_to_world = get_actor_T_world(actors[0], n_frame)
+    available_boxes_in_ego_frame = boxes
     
-
-    boxes_ego = boxes                                                       #At first, the boxes in the ego frame are the ones given by the ego vehicle actor           
-    
-    # TODO : retrieve boxes in actor frame for all actors
     world_to_ego = np.linalg.inv(ego_to_world)
-    for actor in actors[1:]:                                               #Then we loop through the actors
-        
-        boxes = get_boxes_in_actor_frame(n_frame, actor)                    #Step 1 - get the boxes in actor frame
-        boxes_centers = boxes[:,:3]                                         #Step 2 - get the centers of the boxes (only information that will be transformed)
-        boxes_yaws = boxes[:,6]                                             #Step 2 - get the yaws of the boxes (only information that will be transformed)
-        
-        actor_to_world = get_actor_T_world(actor, n_frame)                  #Step 3 - get the transformation matrix from actor to world frame
-        
-        boxes_centers_world = apply_tf(actor_to_world, boxes_centers)       #Step 4 - transform the centers to world frame
-        boxes_centers_ego = apply_tf(world_to_ego, boxes_centers_world)     #Step 5 - transform the centers to ego frame
-        
-        boxes_yaws_world = apply_tf(actor_to_world, boxes_yaws)             #Step 6 - transform the yaws to world frame
-        boxes_yaws_ego = apply_tf(world_to_ego, boxes_yaws_world)           #Step 7 - transform the yaws to ego frame
 
-        boxes[:,:3] = boxes_centers_ego                                     #Step 6 - update the boxes with the transformed centers
-        boxes[:,6] = boxes_yaws_ego                                         #Step 7 - update the boxes with the transformed yaws
+    # TODO : retrieve boxes in actor frame for all actors
+    for actor in actors[1:]:
+        boxes = get_boxes_in_actor_frame(n_frame, actor) #in actor frame
+        boxes = np.array(boxes).reshape(-1,8)
 
-        boxes_ego = np.concatenate((boxes_ego, boxes), axis=0)              #Step 8 - merge the boxes in ego frame
+        actor_to_world = get_actor_T_world(actor, n_frame)
+
+        #Transform the center coordinates of the boxes to the ego frame
+        boxes_centers = boxes[:,:3]
+        boxes_centers_ego = apply_tf(world_to_ego @ actor_to_world, boxes_centers)
+
+        #Rotate the yaw of the boxes to the ego frame
+        yaw = boxes[:,6]
+        actor_to_ego_rot = (world_to_ego @ actor_to_world)[:3,:3]
+        yaw_ego = np.arctan2(actor_to_ego_rot[1,0], actor_to_ego_rot[0,0]) + yaw
+
         
-    return boxes_ego 
+        boxes[:,:3] = boxes_centers_ego
+        boxes[:,6] = yaw_ego
+        
+        available_boxes_in_ego_frame = np.concatenate((available_boxes_in_ego_frame, boxes), axis=0)
+
+
+    return available_boxes_in_ego_frame 
 
 def filter_points(points: np.ndarray, range: np.ndarray):
     '''
