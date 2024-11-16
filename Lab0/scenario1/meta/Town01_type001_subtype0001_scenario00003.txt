@@ -1,0 +1,7 @@
+ClearNoon -1 -1 -1 -1 -1 -1 -1 110
+ colliding agents: other other_behind
+ agents id: 7244 7255 7242 7256
+ road_type: three-way junction
+ another_vehicle_spawn_side: right
+ ego_vehicle_direction: right
+ other_vehicle_direction: straight
