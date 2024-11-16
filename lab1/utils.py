@@ -199,6 +199,12 @@ def filter_points(points: np.ndarray, range: np.ndarray):
     '''
     # TODO: filter points within the range
     
-    filtered_points = points # this is just a dummy value
+    xmin, ymin, zmin, xmax, ymax, zmax = range
+    mask = (
+        (points[:, 0] >= xmin) & (points[:, 0] <= xmax) &
+        (points[:, 1] >= ymin) & (points[:, 1] <= ymax) &
+        (points[:, 2] >= zmin) & (points[:, 2] <= zmax)
+    )
+    filtered_points = points[mask]
 
     return filtered_points

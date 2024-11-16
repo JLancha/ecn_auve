@@ -166,14 +166,15 @@ def box_to_pixels(boxes, bev_imsize, bev_resolution):
     top = [0,4,5,1]
     corners = corners[:, top, :2]
 
-    pixel_coordinates = []
-
     # TODO: find the pixel coordinates of the corners for all boxes
+    pixel_coordinates = []
+    for box_corners in corners:
+        pixels = ((box_corners - np.array([-50, -50])) / bev_resolution).astype(int)
+        pixel_coordinates.append(pixels)
     
-
-    # create mask to get all pixels occupied within corners
     mask = np.zeros(bev_imsize, dtype=np.uint8)
-    cv2.fillPoly(mask, np.array(pixel_coordinates), 255)
+    for box_pixels in pixel_coordinates:
+        cv2.fillPoly(mask, [box_pixels], 255)
     
     return mask
 
@@ -185,6 +186,16 @@ def points_to_pixels(filtered_points : np.ndarray, bev_imsize: np.ndarray , bev_
     return: pixel coordinates of the points (M, 2)
     '''
     # TODO: find pixel coordinates for the points in bev image
+   
+    x_min, y_min = -50, -50  # From the range in the jupyter notebook
+
+    # Calculate pixel coordinates
+    bev_pixels = ((filtered_points[:, :2] - np.array([x_min, y_min])) / bev_resolution).astype(int)
     
-    bev_pixels = []  # this is just a dummy value
+    # Ensure pixel indices are within image bounds
+    bev_pixels = bev_pixels[
+        (bev_pixels[:, 0] >= 0) & (bev_pixels[:, 0] < bev_imsize[1]) &
+        (bev_pixels[:, 1] >= 0) & (bev_pixels[:, 1] < bev_imsize[0])
+    ]
+  
     return bev_pixels
