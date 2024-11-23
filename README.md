@@ -16,6 +16,9 @@ Lastly, Open3D functions are used to trace the bounding boxes around the relevan
 ![Results after completion](Lab0/Slide1.PNG)
 
 ## Lab 1 - Colaborative Perception
+The goal of this lab was to understand how a network of intelligent transportation can help enhance the field of view of an autonomous vehicle.
+In a first moment, we visualize data coming from an Intelligent Road-side Unit  (IRSU), and next, see how the perception data comming from other IRSUs and vehicles gives more information to the ego vehicle, that is now able to perceive more vehicles, objects...
+Finally, we filter the perceived objects by extracting just the top corners of their bounding boxes, in order to build a Bird-Eye view of the scene. This is particullarly important, since it allows for image-based perception techniques to be applied.
 
-
+![Results after completion](lab1/lab1auve.png)
 ## Lab 2 - Coming soon
