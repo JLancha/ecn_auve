@@ -21,4 +21,5 @@ In a first moment, we visualize data coming from an Intelligent Road-side Unit  
 Finally, we filter the perceived objects by extracting just the top corners of their bounding boxes, in order to build a Bird-Eye view of the scene. This is particullarly important, since it allows for image-based perception techniques to be applied.
 
 ![Results after completion](lab1/lab1auve.png)
-## Lab 2 - Coming soon
+## Lab 2 - Global and Local Planning
+Implementation of A* and Dynamic window approach to generate global and local plans for an autonomous vehicle.
