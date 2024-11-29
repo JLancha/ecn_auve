@@ -17,7 +17,7 @@ CLASS_NAME_TO_INDEX = dict(zip(CLASS_NAMES, range(len(CLASS_NAMES))))
 
 # Path extraction
 # root_path = "/home/user/ECN_AUVE_labs/scenario1"
-root_path = "/home/ecn/Desktop/AUVE/ecn_auve/Lab1/scenario1"
+root_path = "/home/ecn/Desktop/ecn_auve/Lab0/scenario1"
 
 scenario = "Town01_type001_subtype0001_scenario00003"  
 
